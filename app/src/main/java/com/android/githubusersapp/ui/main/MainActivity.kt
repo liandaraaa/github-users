@@ -1,7 +1,8 @@
-package com.android.githubusersapp
+package com.android.githubusersapp.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.android.githubusersapp.R
 
 class MainActivity : AppCompatActivity() {
 
