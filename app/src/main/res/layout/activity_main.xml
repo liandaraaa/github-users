@@ -6,10 +6,56 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/svUser"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mcvUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layoutDirection="rtl"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/colorPrimary"
+        app:strokeWidth="2dp">
+
+        <EditText
+            android:id="@+id/edtUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_search_black_24dp"
+            android:drawableEnd="@drawable/ic_search_black_24dp"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLines="1"
+            android:imeOptions="actionSearch"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.kennyc.view.MultiStateView
+        android:id="@+id/msvUser"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:msv_viewState="content"
+        app:msv_loadingView="@layout/layout_loading"
+        app:msv_emptyView="@layout/layout_error"
+        app:msv_errorView="@layout/layout_error"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mcvUser">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvUser"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:clipToPadding="false" />
+
+    </com.kennyc.view.MultiStateView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

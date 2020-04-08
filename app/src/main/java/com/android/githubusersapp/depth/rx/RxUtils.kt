@@ -11,9 +11,9 @@ fun Disposable.add(disposable: CompositeDisposable){
     disposable.add(this)
 }
 
-fun Throwable.getErrorMessage(throwable:Throwable):String{
+fun Throwable.getErrorMessage():String{
     return when(this){
-        is ResponseException -> throwable.message ?: "Error Not Found"
+        is ResponseException -> this.message ?: "Error Not Found"
         is SocketTimeoutException -> "Connection Timeout"
         is IOException -> "Connection IO Exception"
         is JsonSyntaxException -> "JSON Exception"

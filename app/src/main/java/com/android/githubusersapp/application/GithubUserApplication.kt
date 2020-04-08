@@ -2,8 +2,10 @@ package com.android.githubusersapp.application
 
 import android.app.Application
 import com.android.githubusersapp.depth.koin.KoinContext
+import com.android.githubusersapp.depth.module.featureModule
 import com.android.githubusersapp.depth.module.rxModule
 import com.android.githubusersapp.depth.module.serviceModule
+import com.android.githubusersapp.depth.module.utilityModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -18,7 +20,9 @@ class GithubUserApplication :Application(){
             modules(
                 listOf(
                     serviceModule,
-                    rxModule
+                    rxModule,
+                    featureModule,
+                    utilityModule
                 )
             )
         }

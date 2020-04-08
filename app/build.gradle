@@ -78,6 +78,12 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     kapt 'com.github.bumptech.glide:compiler:4.10.0'
 
+    //multistateview
+    implementation  'com.github.Kennyc1012:MultiStateView:2.1.2'
+
+    //paging
+    implementation 'android.arch.paging:runtime:1.0.0'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'

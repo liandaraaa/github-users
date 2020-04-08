@@ -7,7 +7,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitService {
     fun <S> createReactiveService(serviceClass: Class<S>, okhttpClient: OkHttpClient, baseURl: String): S {
-
         val retrofit = Retrofit.Builder()
             .baseUrl(baseURl)
             .client(okhttpClient)

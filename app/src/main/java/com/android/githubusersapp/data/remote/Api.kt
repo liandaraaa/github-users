@@ -8,5 +8,4 @@ class Api(private val apiClient: ApiClient):ApiClient{
     override fun getUsers(query: String): Single<Response<UserResponse>> {
         return apiClient.getUsers(query)
     }
-
 }
