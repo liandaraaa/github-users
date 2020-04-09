@@ -8,4 +8,8 @@ class Api(private val apiClient: ApiClient):ApiClient{
     override fun getUsers(query: String): Single<Response<UserResponse>> {
         return apiClient.getUsers(query)
     }
+
+    override fun getUsers(query: String, limit: Int): Single<Response<UserResponse>> {
+        return apiClient.getUsers(query, limit)
+    }
 }

@@ -5,11 +5,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.EditorInfo
 import androidx.lifecycle.Observer
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.githubusersapp.R
+import com.android.githubusersapp.datasource.PagingDataSource
+import com.android.githubusersapp.datasource.PagingListProvider
 import com.android.githubusersapp.depth.rx.RxState
 import com.android.githubusersapp.domain.model.User
 import com.android.githubusersapp.ui.adapter.UserAdapter
+import com.android.githubusersapp.ui.adapter.UserPagingAdapter
 import com.android.githubusersapp.ui.viewmodel.UserViewModel
 import com.kennyc.view.MultiStateView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -28,8 +34,32 @@ class MainActivity : AppCompatActivity() {
         edtUser.onEditorAction { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val query = edtUser.text.toString()
-                observeUser(query)
-                Log.d("query", query)
+                userViewModel.getPagingUsers(query).observe(this@MainActivity, Observer {
+                    showPagingUser(it)
+                })
+
+                userViewModel.getInitialRxState().observe(this@MainActivity, Observer {
+                    when (it) {
+                        is RxState.Loading -> msvUser.viewState = MultiStateView.ViewState.LOADING
+                        is RxState.Empty -> {
+                            msvUser.viewState = MultiStateView.ViewState.EMPTY
+                            with(msvUser.viewState) {
+                                img_error.setImageResource(R.drawable.ic_sentiment_dissatisfied_accent_24dp)
+                                tv_message.text = "Data tidak ditemukan"
+                            }
+                        }
+                        is RxState.Success -> {
+                            msvUser.viewState = MultiStateView.ViewState.CONTENT
+                        }
+                        is RxState.Error -> {
+                            msvUser.viewState = MultiStateView.ViewState.ERROR
+                            with(msvUser.viewState) {
+                                img_error.setImageResource(R.drawable.ic_sentiment_very_dissatisfied_primary_24dp)
+                                tv_message.text = it.message
+                            }
+                        }
+                    }
+                })
             }
         }
     }
@@ -58,6 +88,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
     }
 
     private fun showUser(users: List<User>) {
@@ -66,5 +97,18 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = userAdapter
         }
+    }
+
+    private fun showPagingUser(users: PagedList<User>) {
+        val userAdapter = UserPagingAdapter()
+        userAdapter.submitList(users)
+        rvUser.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = userAdapter
+        }
+
+        userViewModel.getPaginationRxState().observe(this, Observer {
+            userAdapter.setNetworkState(it)
+        })
     }
 }
