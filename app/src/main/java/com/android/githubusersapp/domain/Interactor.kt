@@ -18,8 +18,8 @@ class Interactor (val repository: Repository):UseCase{
             } }
     }
 
-    override fun getUsers(query: String, limit: Int): Single<List<User>> {
-        return repository.getUsers(query, limit)
+    override fun getUsers(query: String, offset:Int, limit: Int): Single<List<User>> {
+        return repository.getUsers(query, offset, limit)
             .map { it.map {usertItem->
                 User(
                     name = usertItem.login.orEmpty(),

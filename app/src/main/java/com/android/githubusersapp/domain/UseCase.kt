@@ -7,5 +7,5 @@ import io.reactivex.Single
 
 interface UseCase {
     fun getUsers(query:String):Single<List<User>>
-    fun getUsers(query:String, limit:Int):Single<List<User>>
+    fun getUsers(query:String, offset:Int, limit:Int):Single<List<User>>
 }

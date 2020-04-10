@@ -2,16 +2,11 @@ package com.android.githubusersapp.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.inputmethod.EditorInfo
 import androidx.lifecycle.Observer
-import androidx.paging.DataSource
-import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.githubusersapp.R
-import com.android.githubusersapp.datasource.PagingDataSource
-import com.android.githubusersapp.datasource.PagingListProvider
 import com.android.githubusersapp.depth.rx.RxState
 import com.android.githubusersapp.domain.model.User
 import com.android.githubusersapp.ui.adapter.UserAdapter
@@ -108,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         userViewModel.getPaginationRxState().observe(this, Observer {
-            userAdapter.setNetworkState(it)
+            userAdapter.setPaginationState(it)
         })
     }
 }

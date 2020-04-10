@@ -1,10 +1,12 @@
 package com.android.githubusersapp.datasource
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.android.githubusersapp.data.remote.Api
 import com.android.githubusersapp.depth.rx.RxState
 import com.android.githubusersapp.depth.rx.add
+import com.android.githubusersapp.depth.rx.getErrorMessage
 import com.android.githubusersapp.domain.UseCase
 import com.android.githubusersapp.domain.model.User
 import io.reactivex.Completable
@@ -41,59 +43,75 @@ class PagingDataSource<T>(val provider: PagingListProvider<T>) : PageKeyedDataSo
 }
 
 class PagingUserDataSource(
-    val query:String,
+    val query: String,
     val useCase: UseCase,
     val compositeDisposable: CompositeDisposable,
-    val initialRxState:MutableLiveData<RxState<List<User>>>,
-    val paginationRxState:MutableLiveData<RxState<List<User>>>
-) : PageKeyedDataSource<String, User>() {
-    
-    var retryData:Completable? = null
+    val initialRxState: MutableLiveData<RxState<List<User>>>,
+    val paginationRxState: MutableLiveData<RxState<List<User>>>
+) : PageKeyedDataSource<Int, User>() {
+
+    var retryData: Completable? = null
 
     override fun loadInitial(
-        params: LoadInitialParams<String>,
-        callback: LoadInitialCallback<String, User>
+        params: LoadInitialParams<Int>,
+        callback: LoadInitialCallback<Int, User>
     ) {
-        paginationRxState.postValue(RxState.loading())
         initialRxState.postValue(RxState.loading())
-        useCase.getUsers(query, params.requestedLoadSize).subscribe({ users ->
+        useCase.getUsers(query, 1, 10).subscribe({ users ->
             doRerty()
-            paginationRxState.postValue(RxState.success(users))
-            initialRxState.postValue(RxState.success(users))
-            callback.onResult(users, "", "")
+            initialRxState.postValue(if (users.isEmpty()) RxState.empty() else RxState.success(users))
+            callback.onResult(users, 1, 2)
+            Log.d(
+                "paging",
+                "initial param $query, offset ${1} limit ${10} hasil ${users.size}"
+            )
         }, { t: Throwable? ->
             doRerty(Action { loadInitial(params, callback) })
-            paginationRxState.postValue(RxState.error(t?.message))
-            initialRxState.postValue(RxState.error(t?.message))
+            initialRxState.postValue(RxState.error(t?.getErrorMessage()))
+            Log.d(
+                "paging",
+                " error initial param $query, offset ${1} limit ${params.requestedLoadSize} hasil ${t?.message}"
+            )
         }).add(compositeDisposable)
     }
 
-    override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, User>) {
+    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, User>) {
         paginationRxState.postValue(RxState.loading())
-        useCase.getUsers(params.key, params.requestedLoadSize).subscribe({ users ->
+        useCase.getUsers(query, params.key, params.requestedLoadSize).subscribe({ users ->
             doRerty()
-            paginationRxState.postValue(RxState.success(users))
+            paginationRxState.postValue(
+                if (users.isEmpty()) RxState.empty() else RxState.success(
+                    users
+                )
+            )
             callback.onResult(users, params.key + 1)
+            Log.d(
+                "paging",
+                "more param $query, offset ${params.key} ajacentPageKey ${params.key + 1}, limit ${params.requestedLoadSize} hasil ${users.size}"
+            )
         }, { t: Throwable? ->
             doRerty(Action { loadAfter(params, callback) })
-            paginationRxState.postValue(RxState.error(t?.message))
+            paginationRxState.postValue(RxState.error(t?.getErrorMessage()))
+            Log.d(
+                "paging",
+                " error more param ${params.key}, ${params.requestedLoadSize} hasil ${t?.message}"
+            )
         }).add(compositeDisposable)
     }
 
-    override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, User>) {
+    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, User>) {
     }
 
-    fun retryLoadData(){
+    fun retryLoadData() {
         retryData?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe()?.add(compositeDisposable)
     }
 
-    private fun doRerty(action:Action? = null){
-        if(action == null){
+    private fun doRerty(action: Action? = null) {
+        if (action == null) {
             retryData = null
-        }else{
+        } else {
             retryData = Completable.fromAction(action)
         }
     }
-
 }

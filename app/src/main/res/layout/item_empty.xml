@@ -8,7 +8,7 @@
         android:id="@+id/tvError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Something Error Occured"
+        android:text="There's no result or you are in the end of list"
         android:textColor="@color/colorBlack"
         android:layout_centerHorizontal="true"/>
 

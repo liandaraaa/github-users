@@ -13,8 +13,8 @@ class DataStore (private val api:Api):Repository{
             .map { it.userItems }
     }
 
-    override fun getUsers(query: String, limit: Int): Single<List<UserItem>> {
-        return api.getUsers(query, limit)
+    override fun getUsers(query: String, offset:Int, limit: Int): Single<List<UserItem>> {
+        return api.getUsers(query, offset, limit)
             .lift(singleApiError())
             .map { it.userItems }
     }
