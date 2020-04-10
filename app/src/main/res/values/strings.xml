@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Github Users App</string>
+
+    <string name="error_empty_result">No Results</string>
+    <string name="error_something_occured">Something Error Occured</string>
+    <string name="error_title_oops">Ooops!!</string>
+
+    <string name="action_retry">Retry</string>
 </resources>

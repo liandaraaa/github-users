@@ -8,9 +8,6 @@ import retrofit2.http.Query
 
 interface ApiClient {
     @GET("search/users")
-    fun getUsers(@Query("q") query:String):Single<Response<UserResponse>>
-
-    @GET("search/users")
     fun getUsers(@Query("q") query:String,
                  @Query("page") offset:Int,
                  @Query("per_page") limit:Int):Single<Response<UserResponse>>

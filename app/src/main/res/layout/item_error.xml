@@ -8,8 +8,17 @@
         android:id="@+id/tvError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Something Error Occured"
+        android:text="@string/error_something_occured"
         android:textColor="@color/colorBlack"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerInParent="true"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRetry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:text="@string/action_retry"
+        android:textSize="10sp"
+        android:layout_alignParentRight="true"/>
 
 </RelativeLayout>
