@@ -6,4 +6,6 @@
     <string name="error_title_oops">Ooops!!</string>
 
     <string name="action_retry">Retry</string>
+
+    <string name="hint_search_github_user_here">Find interesting github user here..</string>
 </resources>

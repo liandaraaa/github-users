@@ -22,16 +22,31 @@
         app:strokeColor="@color/colorPrimary"
         app:strokeWidth="2dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_search_black_24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="8dp"/>
+
         <EditText
             android:id="@+id/edtUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableRight="@drawable/ic_search_black_24dp"
-            android:drawableEnd="@drawable/ic_search_black_24dp"
+            android:hint="@string/hint_search_github_user_here"
             android:inputType="text"
             android:lines="1"
             android:maxLines="1"
             android:imeOptions="actionSearch"/>
+
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
